@@ -1,9 +1,12 @@
 package com.edward.smartpantrymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     private RecyclerView recyclerView;
     private TextView emptyStateText;
 
+    private ActivityResultLauncher<Intent> addEditLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +43,14 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
         adapter = new PantryAdapter(pantryDao.getAll(), this);
         recyclerView.setAdapter(adapter);
 
+        addEditLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> refreshPantryList()
+        );
+
         addItemFab.setOnClickListener(v -> {
-            Toast.makeText(this, "Add Item screen coming in the next step", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, AddEditItemActivity.class);
+            addEditLauncher.launch(intent);
         });
 
         updateEmptyState();
@@ -69,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
 
     @Override
     public void onItemClicked(PantryItem item) {
-        Toast.makeText(this, "Edit screen coming in the next step: " + item.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = AddEditItemActivity.createEditIntent(this, item.getId());
+        addEditLauncher.launch(intent);
     }
 
     @Override
