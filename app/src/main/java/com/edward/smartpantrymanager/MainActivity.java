@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
             addEditLauncher.launch(intent);
         });
 
+        findViewById(R.id.suggestedButton).setOnClickListener(v ->
+                startActivity(new Intent(this, SuggestedRecipesActivity.class)));
+
         updateEmptyState();
     }
 
