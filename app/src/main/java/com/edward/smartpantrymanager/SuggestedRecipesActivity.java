@@ -67,8 +67,6 @@ public class SuggestedRecipesActivity extends AppCompatActivity
 
     @Override
     public void onRecipeClicked(Recipe recipe) {
-        // Recipe Detail screen is built in the next step
-        Toast.makeText(this, "Detail screen coming next: " + recipe.getName(),
-                Toast.LENGTH_SHORT).show();
+        startActivity(RecipeDetailActivity.createIntent(this, recipe.getId()));
     }
 }
