@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="pantry_green">#2E7D32</color>
+    <color name="pantry_green_dark">#1B5E20</color>
+    <color name="pantry_green_light">#E8F5E9</color>
+    <color name="pantry_accent">#FF8F00</color>
+    <color name="text_secondary">#5F6368</color>
+    <color name="danger_red">#C62828</color>
+
+    <color name="pantry_green_night">#81C784</color>
+    <color name="pantry_on_green_night">#0B2E0E</color>
+    <color name="pantry_container_night">#1B5E20</color>
+    <color name="pantry_on_container_night">#C8E6C9</color>
+    <color name="pantry_accent_night">#FFB74D</color>
 </resources>

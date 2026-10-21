@@ -1,8 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme (light). Pantry-green Material 3 palette. -->
     <style name="Base.Theme.SmartPantryManager" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/pantry_green</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorPrimaryContainer">@color/pantry_green_light</item>
+        <item name="colorOnPrimaryContainer">@color/pantry_green_dark</item>
+        <item name="colorSecondary">@color/pantry_accent</item>
+        <item name="colorOnSecondary">@android:color/black</item>
+        <item name="colorError">@color/danger_red</item>
     </style>
 
     <style name="Theme.SmartPantryManager" parent="Base.Theme.SmartPantryManager" />
