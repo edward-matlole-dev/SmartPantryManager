@@ -11,4 +11,10 @@
     </style>
 
     <style name="Theme.SmartPantryManager" parent="Base.Theme.SmartPantryManager" />
+
+    <style name="ThemeOverlay.SmartPantry.Toolbar" parent="">
+        <item name="actionMenuTextColor">?attr/colorOnPrimary</item>
+        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+    </style>
+
 </resources>
