@@ -3,7 +3,6 @@ package com.edward.smartpantrymanager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,19 +13,29 @@ import com.edward.smartpantrymanager.db.RecipeDao;
 import com.edward.smartpantrymanager.logic.RecipeMatcher;
 import com.edward.smartpantrymanager.model.PantryItem;
 import com.edward.smartpantrymanager.model.Recipe;
-import com.edward.smartpantrymanager.ui.RecipeAdapter;
+import com.edward.smartpantrymanager.ui.AlmostThereAdapter;
 import com.edward.smartpantrymanager.ui.InsetsHelper;
+import com.edward.smartpantrymanager.ui.RecipeAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Shows two clearly separated lists:
+ *  1. Suggested Recipes - strict matches only (every ingredient available).
+ *  2. Almost There - recipes missing exactly one ingredient (bonus feature).
+ */
 public class SuggestedRecipesActivity extends AppCompatActivity
-        implements RecipeAdapter.OnRecipeClickListener {
+        implements RecipeAdapter.OnRecipeClickListener, AlmostThereAdapter.OnRecipeClickListener {
 
     private PantryDao pantryDao;
     private RecipeDao recipeDao;
-    private RecipeAdapter adapter;
-    private RecyclerView recyclerView;
-    private TextView noRecipesText;
+
+    private RecipeAdapter suggestedAdapter;
+    private AlmostThereAdapter almostThereAdapter;
+
+    private RecyclerView suggestedRecycler, almostThereRecycler;
+    private TextView noRecipesText, noAlmostThereText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,34 +46,44 @@ public class SuggestedRecipesActivity extends AppCompatActivity
         pantryDao = new PantryDao(this);
         recipeDao = new RecipeDao(this);
 
-        recyclerView = findViewById(R.id.recipeRecyclerView);
+        suggestedRecycler = findViewById(R.id.recipeRecyclerView);
+        almostThereRecycler = findViewById(R.id.almostThereRecyclerView);
         noRecipesText = findViewById(R.id.noRecipesText);
+        noAlmostThereText = findViewById(R.id.noAlmostThereText);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecipeAdapter(new java.util.ArrayList<>(), this);
-        recyclerView.setAdapter(adapter);
+        suggestedRecycler.setLayoutManager(new LinearLayoutManager(this));
+        almostThereRecycler.setLayoutManager(new LinearLayoutManager(this));
+
+        suggestedAdapter = new RecipeAdapter(new ArrayList<>(), this);
+        almostThereAdapter = new AlmostThereAdapter(new ArrayList<>(), this);
+        suggestedRecycler.setAdapter(suggestedAdapter);
+        almostThereRecycler.setAdapter(almostThereAdapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadSuggestions();
+        loadSuggestions(); // recalculated every time the screen becomes visible
     }
 
     private void loadSuggestions() {
         List<PantryItem> pantry = pantryDao.getAll();
         List<Recipe> allRecipes = recipeDao.getAllRecipesWithIngredients();
+
         List<Recipe> suggested = RecipeMatcher.getSuggestedRecipes(allRecipes, pantry);
+        List<RecipeMatcher.MatchResult> almostThere =
+                RecipeMatcher.getAlmostThereRecipes(allRecipes, pantry);
 
-        adapter.updateRecipes(suggested);
+        suggestedAdapter.updateRecipes(suggested);
+        almostThereAdapter.updateResults(almostThere);
 
-        if (suggested.isEmpty()) {
-            noRecipesText.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-        } else {
-            noRecipesText.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
+        showIfNotEmpty(suggested.isEmpty(), suggestedRecycler, noRecipesText);
+        showIfNotEmpty(almostThere.isEmpty(), almostThereRecycler, noAlmostThereText);
+    }
+
+    private void showIfNotEmpty(boolean isEmpty, View list, View emptyMessage) {
+        emptyMessage.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        list.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
 
     @Override
