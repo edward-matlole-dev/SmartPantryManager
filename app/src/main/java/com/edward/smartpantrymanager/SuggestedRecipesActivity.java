@@ -15,6 +15,7 @@ import com.edward.smartpantrymanager.logic.RecipeMatcher;
 import com.edward.smartpantrymanager.model.PantryItem;
 import com.edward.smartpantrymanager.model.Recipe;
 import com.edward.smartpantrymanager.ui.RecipeAdapter;
+import com.edward.smartpantrymanager.ui.InsetsHelper;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_recipes);
+        InsetsHelper.applySystemBarInsets(this);
 
         pantryDao = new PantryDao(this);
         recipeDao = new RecipeDao(this);

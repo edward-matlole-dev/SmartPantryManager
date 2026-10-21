@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.edward.smartpantrymanager.db.PantryDao;
 import com.edward.smartpantrymanager.model.PantryItem;
+import com.edward.smartpantrymanager.ui.InsetsHelper;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddEditItemActivity extends AppCompatActivity {
@@ -26,6 +27,7 @@ public class AddEditItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_item);
+        InsetsHelper.applySystemBarInsets(this);
 
         pantryDao = new PantryDao(this);
 

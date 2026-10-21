@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.edward.smartpantrymanager.ui.InsetsHelper;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -17,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        InsetsHelper.applySystemBarInsets(this);
 
         MaterialSwitch expirySwitch = findViewById(R.id.expiryAlertSwitch);
         expirySwitch.setChecked(isExpiryAlertsEnabled(this));

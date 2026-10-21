@@ -2,6 +2,8 @@ package com.edward.smartpantrymanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.edward.smartpantrymanager.db.PantryDao;
 import com.edward.smartpantrymanager.model.PantryItem;
 import com.edward.smartpantrymanager.ui.PantryAdapter;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.edward.smartpantrymanager.ui.InsetsHelper;
 
 import java.util.List;
 
@@ -31,6 +35,10 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        InsetsHelper.applySystemBarInsets(this);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         pantryDao = new PantryDao(this);
 
@@ -52,9 +60,6 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
             Intent intent = new Intent(this, AddEditItemActivity.class);
             addEditLauncher.launch(intent);
         });
-
-        findViewById(R.id.suggestedButton).setOnClickListener(v ->
-                startActivity(new Intent(this, SuggestedRecipesActivity.class)));
 
         updateEmptyState();
     }
@@ -79,6 +84,25 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
             emptyStateText.setVisibility(android.view.View.GONE);
             recyclerView.setVisibility(android.view.View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_suggested) {
+            startActivity(new Intent(this, SuggestedRecipesActivity.class));
+            return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

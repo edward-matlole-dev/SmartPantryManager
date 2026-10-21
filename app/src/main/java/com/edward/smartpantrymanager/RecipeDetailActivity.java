@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.edward.smartpantrymanager.db.RecipeDao;
 import com.edward.smartpantrymanager.model.Recipe;
 import com.edward.smartpantrymanager.model.RecipeIngredient;
+import com.edward.smartpantrymanager.ui.InsetsHelper;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -19,6 +20,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+        InsetsHelper.applySystemBarInsets(this);
 
         TextView nameText = findViewById(R.id.detailRecipeName);
         TextView ingredientsText = findViewById(R.id.detailIngredients);
