@@ -28,6 +28,12 @@ public class PantryDao {
         return db.insert(PantryDatabaseHelper.TABLE_PANTRY_ITEMS, null, values);
     }
 
+    /** Re-inserts a previously deleted item (used by Undo). Returns the new row id. */
+    public long restore(PantryItem item) {
+        return insert(new PantryItem(
+                item.getName(), item.getQuantity(), item.getUnit(), item.getExpiryDate()));
+    }
+
     public int update(PantryItem item) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
