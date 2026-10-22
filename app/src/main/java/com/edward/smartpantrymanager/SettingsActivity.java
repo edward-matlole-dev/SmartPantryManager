@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.edward.smartpantrymanager.ui.InsetsHelper;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -19,6 +20,9 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         InsetsHelper.applySystemBarInsets(this);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         MaterialSwitch expirySwitch = findViewById(R.id.expiryAlertSwitch);
         expirySwitch.setChecked(isExpiryAlertsEnabled(this));
