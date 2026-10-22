@@ -1,6 +1,81 @@
 <resources>
     <string name="app_name">Smart Pantry Manager</string>
     <string name="delete_item_description">Delete item</string>
+    <string name="back_description">Go back</string>
+    <string name="add_pantry_item">Add pantry item</string>
+    <string name="pantry_title">My pantry</string>
+    <string name="pantry_eyebrow">KITCHEN INVENTORY</string>
+    <string name="pantry_summary">Keep every ingredient in one calm, clear place.</string>
+    <string name="pantry_empty_title">Your shelves are ready</string>
+    <string name="pantry_empty_message">Add what you have at home and we’ll surface recipes you can make.</string>
+    <string name="add_first_ingredient">Add your first ingredient</string>
+    <plurals name="pantry_item_count">
+        <item quantity="one">%1$d ingredient in your pantry</item>
+        <item quantity="other">%1$d ingredients in your pantry</item>
+    </plurals>
+
+    <string name="add_ingredient_title">Add ingredient</string>
+    <string name="edit_ingredient_title">Edit ingredient</string>
+    <string name="ingredient_form_subtitle">A few details now make matching recipes later effortless.</string>
+    <string name="ingredient_name_label">Ingredient name</string>
+    <string name="quantity_label">Quantity</string>
+    <string name="unit_label">Unit</string>
+    <string name="expiry_label">Expiry date (optional)</string>
+    <string name="expiry_supporting_text">Choose a date to receive an expiry highlight.</string>
+    <string name="save_ingredient">Save ingredient</string>
+    <string name="date_picker_description">Choose expiry date</string>
+
+    <string name="recipes_title">Recipe ideas</string>
+    <string name="recipes_eyebrow">COOK WITH WHAT YOU HAVE</string>
+    <string name="recipes_summary">Your pantry is matched against a collection of easy everyday meals.</string>
+    <string name="ready_to_make">Ready to make</string>
+    <string name="ready_to_make_description">Every ingredient is already in your pantry.</string>
+    <string name="no_ready_recipes">No exact matches just yet. Add a few more ingredients to unlock meal ideas.</string>
+    <string name="almost_there">Almost there</string>
+    <string name="almost_there_description">Only one ingredient stands between you and these recipes.</string>
+    <string name="no_almost_recipes">Nothing is one ingredient away right now.</string>
+    <plurals name="recipe_count">
+        <item quantity="one">%1$d recipe</item>
+        <item quantity="other">%1$d recipes</item>
+    </plurals>
+    <plurals name="recipe_ready_count">
+        <item quantity="one">%1$d recipe ready</item>
+        <item quantity="other">%1$d recipes ready</item>
+    </plurals>
+    <plurals name="ingredient_count">
+        <item quantity="one">%1$d ingredient</item>
+        <item quantity="other">%1$d ingredients</item>
+    </plurals>
+    <string name="recipe_ready_to_cook">%1$s · ready to cook</string>
+    <string name="recipe_missing_ingredient">Missing: %1$s</string>
+
+    <string name="recipe_detail_title">Recipe</string>
+    <string name="recipe_not_found">Recipe not found</string>
+    <string name="ingredients_heading">Ingredients</string>
+    <string name="method_heading">Method</string>
+    <string name="recipe_detail_subtitle">Everything you need for a simple, home-cooked meal.</string>
+    <string name="recipe_ingredient_line">• %1$s %2$s %3$s</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_eyebrow">MAKE IT YOURS</string>
+    <string name="settings_summary">Fine-tune how your pantry keeps you in the loop.</string>
+    <string name="smart_alerts_heading">Smart alerts</string>
+    <string name="expiry_alerts_title">Expiring-soon alerts</string>
+    <string name="expiry_alerts_description">Highlight ingredients that expire within the next 3 days.</string>
+    <string name="expiry_alerts_accessibility">Toggle expiring-soon alerts</string>
+    <string name="expiry_soon_format">Expires %1$s · use soon</string>
+    <string name="expiry_format">Expires %1$s</string>
+
+    <string name="item_deleted">%1$s deleted</string>
+    <string name="undo">Undo</string>
+    <string name="save_failed">Could not save the ingredient. Please try again.</string>
+    <string name="delete_failed">Could not delete %1$s</string>
+    <string name="ingredient_required">Ingredient name is required.</string>
+    <string name="quantity_required">Quantity is required.</string>
+    <string name="quantity_positive">Quantity must be greater than zero.</string>
+    <string name="quantity_invalid">Quantity must be a valid number.</string>
+    <string name="unit_required">Please choose a unit.</string>
+    <string name="expiry_invalid">Expiry date must be in the yyyy-MM-dd format.</string>
 
     <string-array name="unit_options">
         <item>pcs</item>
