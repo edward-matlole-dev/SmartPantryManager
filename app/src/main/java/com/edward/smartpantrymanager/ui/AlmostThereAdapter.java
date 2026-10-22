@@ -29,6 +29,7 @@ public class AlmostThereAdapter extends RecyclerView.Adapter<AlmostThereAdapter.
     public AlmostThereAdapter(List<RecipeMatcher.MatchResult> results, OnRecipeClickListener listener) {
         this.results = results;
         this.listener = listener;
+        setHasStableIds(true);
     }
 
     public void updateResults(List<RecipeMatcher.MatchResult> newResults) {
@@ -63,6 +64,11 @@ public class AlmostThereAdapter extends RecyclerView.Adapter<AlmostThereAdapter.
     @Override
     public int getItemCount() {
         return results.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return results.get(position).recipe.getId();
     }
 
     private String getInitial(String name) {

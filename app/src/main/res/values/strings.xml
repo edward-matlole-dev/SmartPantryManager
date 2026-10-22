@@ -3,9 +3,16 @@
     <string name="delete_item_description">Delete item</string>
     <string name="back_description">Go back</string>
     <string name="add_pantry_item">Add pantry item</string>
+    <string name="recipes_menu_label">Recipes</string>
+    <string name="settings_menu_label">Settings</string>
     <string name="pantry_title">My pantry</string>
     <string name="pantry_eyebrow">KITCHEN INVENTORY</string>
     <string name="pantry_summary">Keep every ingredient in one calm, clear place.</string>
+    <string name="pantry_search_hint">Search ingredients</string>
+    <string name="filter_all">All items</string>
+    <string name="filter_expiring">Expiring soon</string>
+    <string name="no_search_results">No ingredients match your search.</string>
+    <string name="no_expiring_items">No ingredients are expiring soon.</string>
     <string name="pantry_empty_title">Your shelves are ready</string>
     <string name="pantry_empty_message">Add what you have at home and we’ll surface recipes you can make.</string>
     <string name="add_first_ingredient">Add your first ingredient</string>
@@ -22,6 +29,7 @@
     <string name="unit_label">Unit</string>
     <string name="expiry_label">Expiry date (optional)</string>
     <string name="expiry_supporting_text">Choose a date to receive an expiry highlight.</string>
+    <string name="clear_expiry_date">Clear expiry date</string>
     <string name="save_ingredient">Save ingredient</string>
     <string name="date_picker_description">Choose expiry date</string>
 
@@ -55,6 +63,14 @@
     <string name="method_heading">Method</string>
     <string name="recipe_detail_subtitle">Everything you need for a simple, home-cooked meal.</string>
     <string name="recipe_ingredient_line">• %1$s %2$s %3$s</string>
+    <string name="recipe_pantry_check">PANTRY CHECK</string>
+    <string name="recipe_ready_status">Ready to cook</string>
+    <string name="recipe_ready_status_detail">Every required ingredient is in your pantry.</string>
+    <string name="recipe_missing_status_detail">Still needed: %1$s</string>
+    <plurals name="recipe_missing_status">
+        <item quantity="one">%1$d ingredient still needed</item>
+        <item quantity="other">%1$d ingredients still needed</item>
+    </plurals>
 
     <string name="settings_title">Settings</string>
     <string name="settings_eyebrow">MAKE IT YOURS</string>
@@ -65,6 +81,9 @@
     <string name="expiry_alerts_accessibility">Toggle expiring-soon alerts</string>
     <string name="expiry_soon_format">Expires %1$s · use soon</string>
     <string name="expiry_format">Expires %1$s</string>
+    <string name="expired_format">Expired %1$s</string>
+    <string name="expires_today">Expires today · use first</string>
+    <string name="expires_tomorrow">Expires tomorrow · use soon</string>
 
     <string name="item_deleted">%1$s deleted</string>
     <string name="undo">Undo</string>

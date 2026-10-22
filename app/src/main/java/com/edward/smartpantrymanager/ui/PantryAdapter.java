@@ -12,13 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.edward.smartpantrymanager.R;
 import com.edward.smartpantrymanager.SettingsActivity;
+import com.edward.smartpantrymanager.logic.ExpiryUtils;
 import com.edward.smartpantrymanager.model.PantryItem;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,16 +29,48 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         void onDeleteClicked(PantryItem item);
     }
 
+    private List<PantryItem> allItems;
     private List<PantryItem> items;
     private final OnItemActionListener listener;
+    private String query = "";
+    private boolean expiringOnly;
 
     public PantryAdapter(List<PantryItem> items, OnItemActionListener listener) {
-        this.items = items;
+        this.allItems = new ArrayList<>(items);
+        this.items = new ArrayList<>(items);
         this.listener = listener;
+        setHasStableIds(true);
     }
 
     public void updateItems(List<PantryItem> newItems) {
-        this.items = newItems;
+        this.allItems = new ArrayList<>(newItems);
+        applyFilters();
+    }
+
+    public void setQuery(String query) {
+        this.query = query == null ? "" : query.trim().toLowerCase(Locale.getDefault());
+        applyFilters();
+    }
+
+    public void setExpiringOnly(boolean expiringOnly) {
+        this.expiringOnly = expiringOnly;
+        applyFilters();
+    }
+
+    public int getTotalItemCount() {
+        return allItems.size();
+    }
+
+    private void applyFilters() {
+        List<PantryItem> filtered = new ArrayList<>();
+        for (PantryItem item : allItems) {
+            String name = item.getName() == null ? "" : item.getName().toLowerCase(Locale.getDefault());
+            boolean matchesQuery = query.isEmpty() || name.contains(query);
+            boolean matchesExpiry = !expiringOnly || (item.getExpiryDate() != null
+                    && !item.getExpiryDate().isEmpty() && isExpiringSoon(item.getExpiryDate()));
+            if (matchesQuery && matchesExpiry) filtered.add(item);
+        }
+        this.items = filtered;
         notifyDataSetChanged();
     }
 
@@ -65,11 +95,11 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
 
         if (item.getExpiryDate() != null && !item.getExpiryDate().isEmpty()) {
             boolean alertsOn = SettingsActivity.isExpiryAlertsEnabled(holder.itemView.getContext());
+            ExpiryUtils.Status expiryStatus = ExpiryUtils.getStatus(item.getExpiryDate());
             boolean soon = alertsOn && isExpiringSoon(item.getExpiryDate());
 
             if (soon) {
-                holder.expiryText.setText(holder.itemView.getContext().getString(
-                        R.string.expiry_soon_format, item.getExpiryDate()));
+                holder.expiryText.setText(getExpiryText(holder, item.getExpiryDate(), expiryStatus));
                 holder.expiryText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),
                         R.color.pantry_expiry));
             } else {
@@ -97,23 +127,28 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         return items.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return items.get(position).getId();
+    }
+
     /** True if the date is today, within the next 3 days, or already past. */
-    private boolean isExpiringSoon(String expiry) {
-        try {
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            fmt.setLenient(false);
-            Date expiryDate = fmt.parse(expiry);
+    public static boolean isExpiringSoon(String expiry) {
+        return ExpiryUtils.isExpiringSoon(expiry);
+    }
 
-            Calendar today = Calendar.getInstance();
-            today.set(Calendar.HOUR_OF_DAY, 0);
-            today.set(Calendar.MINUTE, 0);
-            today.set(Calendar.SECOND, 0);
-            today.set(Calendar.MILLISECOND, 0);
-
-            long diffDays = (expiryDate.getTime() - today.getTimeInMillis()) / (24L * 60 * 60 * 1000);
-            return diffDays <= 3;
-        } catch (ParseException e) {
-            return false;
+    private String getExpiryText(PantryViewHolder holder, String expiryDate,
+                                 ExpiryUtils.Status status) {
+        switch (status) {
+            case EXPIRED:
+                return holder.itemView.getContext().getString(R.string.expired_format, expiryDate);
+            case TODAY:
+                return holder.itemView.getContext().getString(R.string.expires_today);
+            case TOMORROW:
+                return holder.itemView.getContext().getString(R.string.expires_tomorrow);
+            default:
+                return holder.itemView.getContext().getString(
+                        R.string.expiry_soon_format, expiryDate);
         }
     }
 

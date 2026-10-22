@@ -20,7 +20,9 @@
         <item name="colorError">@color/pantry_error</item>
         <item name="colorOnError">@color/pantry_on_error</item>
         <item name="colorErrorContainer">@color/pantry_error_container</item>
+        <item name="android:statusBarColor">@color/pantry_primary</item>
         <item name="android:navigationBarColor">@color/pantry_surface</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:fontFamily">sans</item>
     </style>
 </resources>

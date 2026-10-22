@@ -6,6 +6,7 @@ import com.edward.smartpantrymanager.model.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +78,21 @@ public class RecipeMatcher {
         }
     }
 
+    /**
+     * A recipe can list the same ingredient more than once (for example, oil in two
+     * stages). Keep the comparison unit with the name so compatible quantities can
+     * be added before checking the pantry once.
+     */
+    private static class RequiredAmount {
+        final String displayName;
+        double amount;
+
+        RequiredAmount(String displayName, double amount) {
+            this.displayName = displayName;
+            this.amount = amount;
+        }
+    }
+
     // ---------------------------------------------------------------- names
 
     /**
@@ -143,8 +159,12 @@ public class RecipeMatcher {
     private static Map<String, Map<String, Double>> buildPantryLookup(List<PantryItem> pantryItems) {
         Map<String, Map<String, Double>> lookup = new HashMap<>();
 
+        if (pantryItems == null) return lookup;
+
         for (PantryItem item : pantryItems) {
+            if (item == null) continue;
             String key = normalize(item.getName());
+            if (key.isEmpty() || item.getQuantity() <= 0) continue;
             String unit = baseUnitOf(item.getUnit());
             double amount = toBaseAmount(item.getUnit(), item.getQuantity());
 
@@ -158,14 +178,44 @@ public class RecipeMatcher {
     private static MatchResult checkRecipe(Recipe recipe, Map<String, Map<String, Double>> pantryLookup) {
         List<String> missing = new ArrayList<>();
 
-        for (RecipeIngredient required : recipe.getIngredients()) {
-            Map<String, Double> unitMap = pantryLookup.get(normalize(required.getIngredientName()));
-            double available = (unitMap != null)
-                    ? unitMap.getOrDefault(baseUnitOf(required.getUnit()), 0.0) : 0.0;
-            double needed = toBaseAmount(required.getUnit(), required.getQuantityRequired());
+        if (recipe == null || recipe.getIngredients() == null || recipe.getIngredients().isEmpty()) {
+            return new MatchResult(recipe, false, 0, missing);
+        }
 
-            if (available + EPSILON < needed) {
-                missing.add(required.getIngredientName());
+        Map<String, RequiredAmount> requirements = new LinkedHashMap<>();
+        for (RecipeIngredient required : recipe.getIngredients()) {
+            if (required == null) continue;
+
+            String ingredient = normalize(required.getIngredientName());
+            String baseUnit = baseUnitOf(required.getUnit());
+            String requirementKey = ingredient + "::" + baseUnit;
+            double amount = toBaseAmount(required.getUnit(), required.getQuantityRequired());
+
+            RequiredAmount existing = requirements.get(requirementKey);
+            if (existing == null) {
+                requirements.put(requirementKey,
+                        new RequiredAmount(required.getIngredientName(), amount));
+            } else {
+                existing.amount += amount;
+            }
+        }
+
+        if (requirements.isEmpty()) {
+            return new MatchResult(recipe, false, 0, missing);
+        }
+
+        for (Map.Entry<String, RequiredAmount> entry : requirements.entrySet()) {
+            String requirementKey = entry.getKey();
+            int separatorIndex = requirementKey.lastIndexOf("::");
+            String ingredient = requirementKey.substring(0, separatorIndex);
+            String baseUnit = requirementKey.substring(separatorIndex + 2);
+            RequiredAmount required = entry.getValue();
+            Map<String, Double> unitMap = pantryLookup.get(ingredient);
+            double available = (unitMap != null)
+                    ? unitMap.getOrDefault(baseUnit, 0.0) : 0.0;
+
+            if (available + EPSILON < required.amount) {
+                missing.add(required.displayName);
             }
         }
         return new MatchResult(recipe, missing.isEmpty(), missing.size(), missing);
@@ -180,6 +230,7 @@ public class RecipeMatcher {
     public static List<Recipe> getSuggestedRecipes(List<Recipe> allRecipes, List<PantryItem> pantryItems) {
         Map<String, Map<String, Double>> lookup = buildPantryLookup(pantryItems);
         List<Recipe> suggested = new ArrayList<>();
+        if (allRecipes == null) return suggested;
         for (Recipe recipe : allRecipes) {
             if (checkRecipe(recipe, lookup).fullyMatched) {
                 suggested.add(recipe);
@@ -192,6 +243,7 @@ public class RecipeMatcher {
     public static List<MatchResult> getAlmostThereRecipes(List<Recipe> allRecipes, List<PantryItem> pantryItems) {
         Map<String, Map<String, Double>> lookup = buildPantryLookup(pantryItems);
         List<MatchResult> almostThere = new ArrayList<>();
+        if (allRecipes == null) return almostThere;
         for (Recipe recipe : allRecipes) {
             MatchResult result = checkRecipe(recipe, lookup);
             if (!result.fullyMatched && result.missingCount == 1) {

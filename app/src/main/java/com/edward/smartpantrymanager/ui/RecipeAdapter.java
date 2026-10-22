@@ -26,6 +26,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public RecipeAdapter(List<Recipe> recipes, OnRecipeClickListener listener) {
         this.recipes = recipes;
         this.listener = listener;
+        setHasStableIds(true);
     }
 
     public void updateRecipes(List<Recipe> newRecipes) {
@@ -62,6 +63,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public int getItemCount() {
         return recipes.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return recipes.get(position).getId();
     }
 
     private String getInitial(String name) {
