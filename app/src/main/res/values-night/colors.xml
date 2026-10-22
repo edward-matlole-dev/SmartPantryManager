@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pantry_primary">#7EDAB3</color>
+    <color name="pantry_on_primary">#003825</color>
+    <color name="pantry_primary_container">#005139</color>
+    <color name="pantry_on_primary_container">#9AF8CD</color>
+    <color name="pantry_secondary">#FFB785</color>
+    <color name="pantry_on_secondary">#5A2600</color>
+    <color name="pantry_secondary_container">#7E3900</color>
+    <color name="pantry_on_secondary_container">#FFDBC4</color>
+    <color name="pantry_tertiary">#A8CAFF</color>
+    <color name="pantry_on_tertiary">#08335F</color>
+    <color name="pantry_surface">#101512</color>
+    <color name="pantry_surface_variant">#414A43</color>
+    <color name="pantry_on_surface">#DFE4DE</color>
+    <color name="pantry_on_surface_variant">#C1CBC3</color>
+    <color name="pantry_outline">#8B958C</color>
+    <color name="pantry_outline_variant">#414A43</color>
+    <color name="pantry_error">#FFB4AB</color>
+    <color name="pantry_on_error">#690005</color>
+    <color name="pantry_error_container">#93000A</color>
+    <color name="pantry_expiry">#FFB4AB</color>
+    <color name="pantry_muted">#BAC5BC</color>
+</resources>
