@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="pantry_green">#2E7D32</color>
-    <color name="pantry_green_dark">#1B5E20</color>
-    <color name="pantry_green_light">#E8F5E9</color>
-    <color name="pantry_accent">#FF8F00</color>
-    <color name="text_secondary">#5F6368</color>
-    <color name="danger_red">#C62828</color>
+    <!-- Fresh pantry palette: evergreen, mint, and a warm harvest accent. -->
+    <color name="pantry_primary">#176B52</color>
+    <color name="pantry_on_primary">#FFFFFF</color>
+    <color name="pantry_primary_container">#D7F5E5</color>
+    <color name="pantry_on_primary_container">#003827</color>
+    <color name="pantry_secondary">#A74E00</color>
+    <color name="pantry_on_secondary">#FFFFFF</color>
+    <color name="pantry_secondary_container">#FFDBBF</color>
+    <color name="pantry_on_secondary_container">#371600</color>
+    <color name="pantry_tertiary">#3F628F</color>
+    <color name="pantry_on_tertiary">#FFFFFF</color>
+    <color name="pantry_surface">#FBFCF8</color>
+    <color name="pantry_surface_variant">#DEE8E0</color>
+    <color name="pantry_on_surface">#171D19</color>
+    <color name="pantry_on_surface_variant">#414A43</color>
+    <color name="pantry_outline">#717A72</color>
+    <color name="pantry_outline_variant">#C1CBC3</color>
+    <color name="pantry_error">#BA1A1A</color>
+    <color name="pantry_on_error">#FFFFFF</color>
+    <color name="pantry_error_container">#FFDAD6</color>
+    <color name="pantry_expiry">#B3261E</color>
+    <color name="pantry_muted">#647068</color>
 
-    <color name="pantry_green_night">#81C784</color>
-    <color name="pantry_on_green_night">#0B2E0E</color>
-    <color name="pantry_container_night">#1B5E20</color>
-    <color name="pantry_on_container_night">#C8E6C9</color>
-    <color name="pantry_accent_night">#FFB74D</color>
+    <!-- Kept for existing adapter references. -->
+    <color name="pantry_accent">@color/pantry_secondary</color>
+    <color name="danger_red">@color/pantry_error</color>
 </resources>
