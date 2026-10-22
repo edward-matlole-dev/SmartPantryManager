@@ -86,6 +86,15 @@ public class RecipeMatcherTest {
         assertEquals(1, result.size());
     }
 
+    @Test
+    public void duplicateRecipeIngredients_areAddedBeforeStrictComparison() {
+        Recipe recipe = recipe("Double Egg Toast",
+                need("egg", 1, "pcs"), need("egg", 2, "pcs"));
+
+        assertTrue(suggested(recipe, have("egg", 2, "pcs")).isEmpty());
+        assertEquals(1, suggested(recipe, have("egg", 3, "pcs")).size());
+    }
+
     // ------------------------------------------- name messiness (plurals)
 
     @Test
