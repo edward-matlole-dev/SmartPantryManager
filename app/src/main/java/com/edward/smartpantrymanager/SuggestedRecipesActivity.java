@@ -16,6 +16,7 @@ import com.edward.smartpantrymanager.model.Recipe;
 import com.edward.smartpantrymanager.ui.AlmostThereAdapter;
 import com.edward.smartpantrymanager.ui.InsetsHelper;
 import com.edward.smartpantrymanager.ui.RecipeAdapter;
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,8 @@ public class SuggestedRecipesActivity extends AppCompatActivity
     private AlmostThereAdapter almostThereAdapter;
 
     private RecyclerView suggestedRecycler, almostThereRecycler;
-    private TextView noRecipesText, noAlmostThereText;
+    private View noRecipesText, noAlmostThereText;
+    private TextView recipeMatchCountText, suggestedCountText, almostThereCountText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +48,16 @@ public class SuggestedRecipesActivity extends AppCompatActivity
         pantryDao = new PantryDao(this);
         recipeDao = new RecipeDao(this);
 
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
         suggestedRecycler = findViewById(R.id.recipeRecyclerView);
         almostThereRecycler = findViewById(R.id.almostThereRecyclerView);
         noRecipesText = findViewById(R.id.noRecipesText);
         noAlmostThereText = findViewById(R.id.noAlmostThereText);
+        recipeMatchCountText = findViewById(R.id.recipeMatchCountText);
+        suggestedCountText = findViewById(R.id.suggestedCountText);
+        almostThereCountText = findViewById(R.id.almostThereCountText);
 
         suggestedRecycler.setLayoutManager(new LinearLayoutManager(this));
         almostThereRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -77,11 +85,16 @@ public class SuggestedRecipesActivity extends AppCompatActivity
         suggestedAdapter.updateRecipes(suggested);
         almostThereAdapter.updateResults(almostThere);
 
-        showIfNotEmpty(suggested.isEmpty(), suggestedRecycler, noRecipesText);
-        showIfNotEmpty(almostThere.isEmpty(), almostThereRecycler, noAlmostThereText);
+        recipeMatchCountText.setText(getResources().getQuantityString(
+                R.plurals.recipe_ready_count, suggested.size(), suggested.size()));
+        suggestedCountText.setText(String.valueOf(suggested.size()));
+        almostThereCountText.setText(String.valueOf(almostThere.size()));
+
+        showEmptyState(suggested.isEmpty(), suggestedRecycler, noRecipesText);
+        showEmptyState(almostThere.isEmpty(), almostThereRecycler, noAlmostThereText);
     }
 
-    private void showIfNotEmpty(boolean isEmpty, View list, View emptyMessage) {
+    private void showEmptyState(boolean isEmpty, View list, View emptyMessage) {
         emptyMessage.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
         list.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
     }
