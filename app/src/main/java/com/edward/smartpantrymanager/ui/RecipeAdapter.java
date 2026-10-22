@@ -12,6 +12,7 @@ import com.edward.smartpantrymanager.R;
 import com.edward.smartpantrymanager.model.Recipe;
 
 import java.util.List;
+import java.util.Locale;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -45,9 +46,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         Recipe recipe = recipes.get(position);
 
         holder.nameText.setText(recipe.getName());
+        holder.initialText.setText(getInitial(recipe.getName()));
 
         int count = recipe.getIngredients().size();
-        holder.countText.setText(count + " ingredients - ready to cook");
+        String countText = holder.itemView.getResources().getQuantityString(
+                R.plurals.ingredient_count, count, count);
+        holder.countText.setText(holder.itemView.getContext().getString(
+                R.string.recipe_ready_to_cook, countText));
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onRecipeClicked(recipe);
@@ -59,12 +64,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return recipes.size();
     }
 
+    private String getInitial(String name) {
+        if (name == null || name.trim().isEmpty()) return "?";
+        return name.trim().substring(0, 1).toUpperCase(Locale.getDefault());
+    }
+
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
+        TextView initialText;
         TextView nameText;
         TextView countText;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
+            initialText = itemView.findViewById(R.id.recipeInitialText);
             nameText = itemView.findViewById(R.id.recipeNameText);
             countText = itemView.findViewById(R.id.recipeIngredientCountText);
         }
