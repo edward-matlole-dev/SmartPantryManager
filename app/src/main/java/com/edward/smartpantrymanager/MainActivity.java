@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.edward.smartpantrymanager.model.PantryItem;
 import com.edward.smartpantrymanager.ui.PantryAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.edward.smartpantrymanager.ui.InsetsHelper;
 
 import java.util.List;
@@ -27,7 +29,8 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     private PantryDao pantryDao;
     private PantryAdapter adapter;
     private RecyclerView recyclerView;
-    private TextView emptyStateText;
+    private View emptyStateContainer;
+    private TextView pantryCountText;
 
     private ActivityResultLauncher<Intent> addEditLauncher;
 
@@ -43,7 +46,8 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
         pantryDao = new PantryDao(this);
 
         recyclerView = findViewById(R.id.pantryRecyclerView);
-        emptyStateText = findViewById(R.id.emptyStateText);
+        emptyStateContainer = findViewById(R.id.emptyStateContainer);
+        pantryCountText = findViewById(R.id.pantryCountText);
         FloatingActionButton addItemFab = findViewById(R.id.addItemFab);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,10 +60,8 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
                 result -> refreshPantryList()
         );
 
-        addItemFab.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AddEditItemActivity.class);
-            addEditLauncher.launch(intent);
-        });
+        addItemFab.setOnClickListener(v -> launchAddItem());
+        findViewById(R.id.emptyAddButton).setOnClickListener(v -> launchAddItem());
 
         updateEmptyState();
     }
@@ -77,13 +79,16 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     }
 
     private void updateEmptyState() {
-        if (adapter.getItemCount() == 0) {
-            emptyStateText.setVisibility(android.view.View.VISIBLE);
-            recyclerView.setVisibility(android.view.View.GONE);
-        } else {
-            emptyStateText.setVisibility(android.view.View.GONE);
-            recyclerView.setVisibility(android.view.View.VISIBLE);
-        }
+        int itemCount = adapter.getItemCount();
+        pantryCountText.setText(getResources().getQuantityString(
+                R.plurals.pantry_item_count, itemCount, itemCount));
+        boolean isEmpty = itemCount == 0;
+        emptyStateContainer.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        recyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+    }
+
+    private void launchAddItem() {
+        addEditLauncher.launch(new Intent(this, AddEditItemActivity.class));
     }
 
     @Override
@@ -113,8 +118,20 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
 
     @Override
     public void onDeleteClicked(PantryItem item) {
-        pantryDao.delete(item.getId());
+        int deleted = pantryDao.delete(item.getId());
+        if (deleted == 0) {
+            Toast.makeText(this, getString(R.string.delete_failed, item.getName()), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         refreshPantryList();
-        Toast.makeText(this, item.getName() + " deleted", Toast.LENGTH_SHORT).show();
+
+        Snackbar.make(recyclerView, getString(R.string.item_deleted, item.getName()), Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, v -> {
+                    pantryDao.restore(item);
+                    refreshPantryList();
+                })
+                .setAnchorView(R.id.addItemFab)
+                .show();
     }
 }
