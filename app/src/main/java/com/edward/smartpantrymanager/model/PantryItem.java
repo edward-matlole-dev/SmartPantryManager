@@ -1,5 +1,6 @@
 package com.edward.smartpantrymanager.model;
 
+/** Holds one pantry row, including its quantity, unit, and optional expiry date. */
 public class PantryItem {
     private long id;
     private String name;

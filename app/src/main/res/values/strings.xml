@@ -42,10 +42,6 @@
     <string name="almost_there">Almost there</string>
     <string name="almost_there_description">Only one ingredient stands between you and these recipes.</string>
     <string name="no_almost_recipes">Nothing is one ingredient away right now.</string>
-    <plurals name="recipe_count">
-        <item quantity="one">%1$d recipe</item>
-        <item quantity="other">%1$d recipes</item>
-    </plurals>
     <plurals name="recipe_ready_count">
         <item quantity="one">%1$d recipe ready</item>
         <item quantity="other">%1$d recipes ready</item>

@@ -20,6 +20,7 @@ import com.google.android.material.chip.Chip;
 
 import java.text.DecimalFormat;
 
+/** Displays recipe instructions and whether the pantry meets every requirement. */
 public class RecipeDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_RECIPE_ID = "extra_recipe_id";

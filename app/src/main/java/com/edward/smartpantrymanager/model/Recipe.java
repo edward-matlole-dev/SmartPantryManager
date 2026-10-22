@@ -3,6 +3,7 @@ package com.edward.smartpantrymanager.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Holds a recipe and the ingredient requirements loaded from SQLite. */
 public class Recipe {
     private long id;
     private String name;

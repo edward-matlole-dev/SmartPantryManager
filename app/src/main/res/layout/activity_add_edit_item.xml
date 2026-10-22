@@ -110,7 +110,7 @@
                             android:id="@+id/unitInput"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:contentDescription="@string/unit_label"
+                            android:hint="@string/unit_label"
                             android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,7 +129,7 @@
                             android:layout_height="wrap_content"
                             android:clickable="true"
                             android:contentDescription="@string/date_picker_description"
-                            android:focusable="false"
+                            android:focusable="true"
                             android:inputType="none" />
                     </com.google.android.material.textfield.TextInputLayout>
 

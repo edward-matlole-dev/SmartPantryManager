@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * Core business logic of the app: decides which recipes can be cooked from the pantry.
@@ -101,7 +102,7 @@ public class RecipeMatcher {
      */
     public static String normalize(String name) {
         if (name == null) return "";
-        String cleaned = name.trim().toLowerCase().replaceAll("\\s+", " ");
+        String cleaned = name.trim().toLowerCase(Locale.ROOT).replaceAll("\\s+", " ");
         if (cleaned.isEmpty()) return "";
 
         int lastSpace = cleaned.lastIndexOf(' ');
@@ -131,7 +132,7 @@ public class RecipeMatcher {
 
     private static String canonicalUnit(String unit) {
         if (unit == null) return "";
-        String cleaned = unit.trim().toLowerCase();
+        String cleaned = unit.trim().toLowerCase(Locale.ROOT);
         if (cleaned.endsWith(".")) cleaned = cleaned.substring(0, cleaned.length() - 1);
         String canonical = UNIT_ALIASES.get(cleaned);
         return canonical != null ? canonical : cleaned;

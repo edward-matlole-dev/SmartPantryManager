@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edward.smartpantrymanager.R;
@@ -14,6 +15,7 @@ import com.edward.smartpantrymanager.model.Recipe;
 import java.util.List;
 import java.util.Locale;
 
+/** Displays recipes that pass every strict pantry requirement. */
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     public interface OnRecipeClickListener {
@@ -30,8 +32,29 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     public void updateRecipes(List<Recipe> newRecipes) {
-        this.recipes = newRecipes;
-        notifyDataSetChanged();
+        List<Recipe> oldRecipes = recipes;
+        DiffUtil.DiffResult changes = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return oldRecipes.size(); }
+
+            @Override
+            public int getNewListSize() { return newRecipes.size(); }
+
+            @Override
+            public boolean areItemsTheSame(int oldPosition, int newPosition) {
+                return oldRecipes.get(oldPosition).getId() == newRecipes.get(newPosition).getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldPosition, int newPosition) {
+                Recipe oldRecipe = oldRecipes.get(oldPosition);
+                Recipe newRecipe = newRecipes.get(newPosition);
+                return oldRecipe.getName().equals(newRecipe.getName())
+                        && oldRecipe.getIngredients().size() == newRecipe.getIngredients().size();
+            }
+        });
+        recipes = newRecipes;
+        changes.dispatchUpdatesTo(this);
     }
 
     @NonNull

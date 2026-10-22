@@ -10,6 +10,7 @@ import com.edward.smartpantrymanager.model.RecipeIngredient;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Loads recipes and their ingredient requirements from SQLite. */
 public class RecipeDao {
 
     private final PantryDatabaseHelper dbHelper;

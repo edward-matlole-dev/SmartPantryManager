@@ -15,6 +15,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+/** Validates and saves new pantry items or edits an existing item. */
 public class AddEditItemActivity extends AppCompatActivity {
 
     public static final String EXTRA_ITEM_ID = "extra_item_id";
@@ -86,6 +87,7 @@ public class AddEditItemActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> handleSave());
     }
 
+    /** Validates user input before inserting or updating the SQLite row. */
     private void handleSave() {
         clearInputErrors();
 

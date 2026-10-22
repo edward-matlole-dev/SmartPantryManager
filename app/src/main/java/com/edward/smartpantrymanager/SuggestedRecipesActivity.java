@@ -26,6 +26,7 @@ import java.util.List;
  *  1. Suggested Recipes - strict matches only (every ingredient available).
  *  2. Almost There - recipes missing exactly one ingredient (bonus feature).
  */
+/** Separates fully makeable recipes from recipes that are almost ready. */
 public class SuggestedRecipesActivity extends AppCompatActivity
         implements RecipeAdapter.OnRecipeClickListener, AlmostThereAdapter.OnRecipeClickListener {
 

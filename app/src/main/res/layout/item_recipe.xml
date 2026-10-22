@@ -70,6 +70,6 @@
             android:contentDescription="@null"
             android:padding="6dp"
             android:src="@drawable/ic_arrow_forward"
-            android:tint="?attr/colorOnSurfaceVariant" />
+            app:tint="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

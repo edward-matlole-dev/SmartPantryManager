@@ -10,6 +10,7 @@ import com.edward.smartpantrymanager.model.PantryItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Reads and writes pantry items while keeping SQL details out of the screens. */
 public class PantryDao {
 
     private final PantryDatabaseHelper dbHelper;

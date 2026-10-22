@@ -25,5 +25,4 @@
 
     <!-- Kept for existing adapter references. -->
     <color name="pantry_accent">@color/pantry_secondary</color>
-    <color name="danger_red">@color/pantry_error</color>
 </resources>

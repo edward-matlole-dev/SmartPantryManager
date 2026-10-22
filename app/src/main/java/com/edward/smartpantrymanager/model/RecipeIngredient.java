@@ -1,5 +1,6 @@
 package com.edward.smartpantrymanager.model;
 
+/** Represents one quantity-and-unit requirement belonging to a recipe. */
 public class RecipeIngredient {
     private long id;
     private long recipeId;

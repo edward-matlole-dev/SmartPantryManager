@@ -10,6 +10,7 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 import com.edward.smartpantrymanager.ui.InsetsHelper;
 import com.google.android.material.appbar.MaterialToolbar;
 
+/** Shows app settings and static information about pantry behavior. */
 public class SettingsActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "pantry_settings";

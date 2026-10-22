@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface"
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -51,7 +50,7 @@
                 android:contentDescription="@null"
                 android:padding="10dp"
                 android:src="@drawable/ic_pantry"
-                android:tint="?attr/colorOnPrimaryContainer" />
+                app:tint="?attr/colorOnPrimaryContainer" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -211,7 +210,7 @@
                 android:layout_height="48dp"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_pantry"
-                android:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:layout_width="wrap_content"

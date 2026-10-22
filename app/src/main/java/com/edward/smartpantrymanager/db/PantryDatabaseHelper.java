@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/** Creates the pantry and recipe tables and seeds starter recipes on first run. */
 public class PantryDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "smart_pantry.db";
@@ -87,10 +88,7 @@ public class PantryDatabaseHelper extends SQLiteOpenHelper {
         db.setForeignKeyConstraintsEnabled(true);
     }
 
-    /**
-     * Seeds the recipes table with 18 starter recipes on first run.
-     * This will be filled in fully in the next step.
-     */
+    /** Seeds the recipe catalog only when SQLite first creates the database. */
     private void seedRecipes(SQLiteDatabase db) {
         insertRecipe(db, "Scrambled Eggs",
                 "1. Crack eggs into a bowl and whisk.\n2. Melt butter in a pan over medium heat.\n3. Pour in eggs, stir gently until soft curds form.\n4. Season and serve.",

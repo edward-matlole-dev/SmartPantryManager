@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edward.smartpantrymanager.R;
@@ -33,8 +34,30 @@ public class AlmostThereAdapter extends RecyclerView.Adapter<AlmostThereAdapter.
     }
 
     public void updateResults(List<RecipeMatcher.MatchResult> newResults) {
-        this.results = newResults;
-        notifyDataSetChanged();
+        List<RecipeMatcher.MatchResult> oldResults = results;
+        DiffUtil.DiffResult changes = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return oldResults.size(); }
+
+            @Override
+            public int getNewListSize() { return newResults.size(); }
+
+            @Override
+            public boolean areItemsTheSame(int oldPosition, int newPosition) {
+                return oldResults.get(oldPosition).recipe.getId()
+                        == newResults.get(newPosition).recipe.getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldPosition, int newPosition) {
+                RecipeMatcher.MatchResult oldResult = oldResults.get(oldPosition);
+                RecipeMatcher.MatchResult newResult = newResults.get(newPosition);
+                return oldResult.recipe.getName().equals(newResult.recipe.getName())
+                        && oldResult.missingIngredients.equals(newResult.missingIngredients);
+            }
+        });
+        results = newResults;
+        changes.dispatchUpdatesTo(this);
     }
 
     @NonNull

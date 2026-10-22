@@ -80,6 +80,6 @@
             android:contentDescription="@string/delete_item_description"
             android:padding="12dp"
             android:src="@drawable/ic_delete"
-            android:tint="?attr/colorOnSurfaceVariant" />
+            app:tint="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

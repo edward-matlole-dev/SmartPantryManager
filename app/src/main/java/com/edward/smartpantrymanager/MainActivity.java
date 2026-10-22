@@ -28,6 +28,7 @@ import com.edward.smartpantrymanager.ui.InsetsHelper;
 
 import java.util.List;
 
+/** Shows the saved pantry, supports filtering, and routes pantry item actions. */
 public class MainActivity extends AppCompatActivity implements PantryAdapter.OnItemActionListener {
 
     private PantryDao pantryDao;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
         refreshPantryList();
     }
 
+    /** Reloads persisted pantry rows and reapplies the active search and filter. */
     private void refreshPantryList() {
         List<PantryItem> items = pantryDao.getAll();
         adapter.updateItems(items);
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     }
 
     @Override
+    /** Deletes an item and offers an undo action that restores its original row. */
     public void onDeleteClicked(PantryItem item) {
         int deleted = pantryDao.delete(item.getId());
         if (deleted == 0) {

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edward.smartpantrymanager.R;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/** Binds pantry rows and applies the user's search and expiry filters. */
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
 
     private static final DecimalFormat QUANTITY_FORMAT = new DecimalFormat("0.##");
@@ -70,8 +72,35 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
                     && !item.getExpiryDate().isEmpty() && isExpiringSoon(item.getExpiryDate()));
             if (matchesQuery && matchesExpiry) filtered.add(item);
         }
-        this.items = filtered;
-        notifyDataSetChanged();
+        List<PantryItem> oldItems = items;
+        DiffUtil.DiffResult changes = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return oldItems.size(); }
+
+            @Override
+            public int getNewListSize() { return filtered.size(); }
+
+            @Override
+            public boolean areItemsTheSame(int oldPosition, int newPosition) {
+                return oldItems.get(oldPosition).getId() == filtered.get(newPosition).getId();
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldPosition, int newPosition) {
+                PantryItem oldItem = oldItems.get(oldPosition);
+                PantryItem newItem = filtered.get(newPosition);
+                return oldItem.getName().equals(newItem.getName())
+                        && oldItem.getQuantity() == newItem.getQuantity()
+                        && equalNullable(oldItem.getUnit(), newItem.getUnit())
+                        && equalNullable(oldItem.getExpiryDate(), newItem.getExpiryDate());
+            }
+        });
+        items = filtered;
+        changes.dispatchUpdatesTo(this);
+    }
+
+    private static boolean equalNullable(String first, String second) {
+        return first == null ? second == null : first.equals(second);
     }
 
     @NonNull
