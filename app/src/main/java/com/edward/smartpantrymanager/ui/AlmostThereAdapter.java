@@ -14,6 +14,7 @@ import com.edward.smartpantrymanager.logic.RecipeMatcher;
 import com.edward.smartpantrymanager.model.Recipe;
 
 import java.util.List;
+import java.util.Locale;
 
 /** Shows recipes that are missing exactly one ingredient, with the missing item named. */
 public class AlmostThereAdapter extends RecyclerView.Adapter<AlmostThereAdapter.ViewHolder> {
@@ -48,7 +49,9 @@ public class AlmostThereAdapter extends RecyclerView.Adapter<AlmostThereAdapter.
         RecipeMatcher.MatchResult result = results.get(position);
 
         holder.nameText.setText(result.recipe.getName());
-        holder.infoText.setText("Missing: " + result.missingIngredients.get(0));
+        holder.initialText.setText(getInitial(result.recipe.getName()));
+        holder.infoText.setText(holder.itemView.getContext().getString(
+                R.string.recipe_missing_ingredient, result.missingIngredients.get(0)));
         holder.infoText.setTextColor(
                 ContextCompat.getColor(holder.itemView.getContext(), R.color.pantry_accent));
 
@@ -62,12 +65,19 @@ public class AlmostThereAdapter extends RecyclerView.Adapter<AlmostThereAdapter.
         return results.size();
     }
 
+    private String getInitial(String name) {
+        if (name == null || name.trim().isEmpty()) return "?";
+        return name.trim().substring(0, 1).toUpperCase(Locale.getDefault());
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView initialText;
         TextView nameText;
         TextView infoText;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
+            initialText = itemView.findViewById(R.id.recipeInitialText);
             nameText = itemView.findViewById(R.id.recipeNameText);
             infoText = itemView.findViewById(R.id.recipeIngredientCountText);
         }
