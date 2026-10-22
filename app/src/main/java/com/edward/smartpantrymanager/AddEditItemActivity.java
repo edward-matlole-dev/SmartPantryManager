@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.edward.smartpantrymanager.db.PantryDao;
 import com.edward.smartpantrymanager.model.PantryItem;
 import com.edward.smartpantrymanager.ui.InsetsHelper;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddEditItemActivity extends AppCompatActivity {
@@ -33,6 +34,9 @@ public class AddEditItemActivity extends AppCompatActivity {
         pantryDao = new PantryDao(this);
 
         screenTitleText = findViewById(R.id.screenTitleText);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.add_ingredient_title);
+        toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         nameInput = findViewById(R.id.nameInput);
         quantityInput = findViewById(R.id.quantityInput);
         unitInput = findViewById(R.id.unitInput);
@@ -53,7 +57,8 @@ public class AddEditItemActivity extends AppCompatActivity {
             // Edit mode - load existing item and pre-fill the form
             existingItem = pantryDao.getById(itemId);
             if (existingItem != null) {
-                screenTitleText.setText("Edit Ingredient");
+                screenTitleText.setText(R.string.edit_ingredient_title);
+                toolbar.setTitle(R.string.edit_ingredient_title);
                 nameInput.setText(existingItem.getName());
                 quantityInput.setText(String.valueOf(existingItem.getQuantity()));
                 unitInput.setText(existingItem.getUnit(), false);
@@ -71,12 +76,12 @@ public class AddEditItemActivity extends AppCompatActivity {
         String expiry = expiryInput.getText() != null ? expiryInput.getText().toString().trim() : "";
 
         if (name.isEmpty()) {
-            showError("Ingredient name is required.");
+            showError(getString(R.string.ingredient_required));
             return;
         }
 
         if (quantityText.isEmpty()) {
-            showError("Quantity is required.");
+            showError(getString(R.string.quantity_required));
             return;
         }
 
@@ -84,21 +89,21 @@ public class AddEditItemActivity extends AppCompatActivity {
         try {
             quantity = Double.parseDouble(quantityText);
             if (quantity <= 0) {
-                showError("Quantity must be greater than zero.");
+                showError(getString(R.string.quantity_positive));
                 return;
             }
         } catch (NumberFormatException e) {
-            showError("Quantity must be a valid number.");
+            showError(getString(R.string.quantity_invalid));
             return;
         }
 
         if (unit.isEmpty()) {
-            showError("Please choose a unit.");
+            showError(getString(R.string.unit_required));
             return;
         }
 
         if (!expiry.isEmpty() && !expiry.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            showError("Expiry date must be in format yyyy-MM-dd.");
+            showError(getString(R.string.expiry_invalid));
             return;
         }
 
@@ -108,10 +113,16 @@ public class AddEditItemActivity extends AppCompatActivity {
         item.setUnit(unit);
         item.setExpiryDate(expiry.isEmpty() ? null : expiry);
 
+        boolean saved;
         if (existingItem != null) {
-            pantryDao.update(item);
+            saved = pantryDao.update(item) > 0;
         } else {
-            pantryDao.insert(item);
+            saved = pantryDao.insert(item) != -1;
+        }
+
+        if (!saved) {
+            showError(getString(R.string.save_failed));
+            return;
         }
 
         setResult(RESULT_OK);
