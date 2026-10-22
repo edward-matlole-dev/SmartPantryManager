@@ -1,6 +1,5 @@
 package com.edward.smartpantrymanager.ui;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +7,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.edward.smartpantrymanager.R;
 import com.edward.smartpantrymanager.SettingsActivity;
 import com.edward.smartpantrymanager.model.PantryItem;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
+
+    private static final DecimalFormat QUANTITY_FORMAT = new DecimalFormat("0.##");
 
     public interface OnItemActionListener {
         void onItemClicked(PantryItem item);
@@ -54,8 +57,10 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         PantryItem item = items.get(position);
 
         holder.nameText.setText(item.getName());
+        holder.initialText.setText(getInitial(item.getName()));
 
-        String quantityText = item.getQuantity() + " " + (item.getUnit() != null ? item.getUnit() : "");
+        String quantityText = QUANTITY_FORMAT.format(item.getQuantity())
+                + " " + (item.getUnit() != null ? item.getUnit() : "");
         holder.quantityText.setText(quantityText);
 
         if (item.getExpiryDate() != null && !item.getExpiryDate().isEmpty()) {
@@ -63,11 +68,15 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
             boolean soon = alertsOn && isExpiringSoon(item.getExpiryDate());
 
             if (soon) {
-                holder.expiryText.setText("Expires: " + item.getExpiryDate() + "  (expiring soon!)");
-                holder.expiryText.setTextColor(Color.parseColor("#D32F2F"));
+                holder.expiryText.setText(holder.itemView.getContext().getString(
+                        R.string.expiry_soon_format, item.getExpiryDate()));
+                holder.expiryText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),
+                        R.color.pantry_expiry));
             } else {
-                holder.expiryText.setText("Expires: " + item.getExpiryDate());
-                holder.expiryText.setTextColor(Color.parseColor("#999999"));
+                holder.expiryText.setText(holder.itemView.getContext().getString(
+                        R.string.expiry_format, item.getExpiryDate()));
+                holder.expiryText.setTextColor(ContextCompat.getColor(holder.itemView.getContext(),
+                        R.color.pantry_muted));
             }
             holder.expiryText.setVisibility(View.VISIBLE);
         } else {
@@ -108,7 +117,13 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
         }
     }
 
+    private String getInitial(String name) {
+        if (name == null || name.trim().isEmpty()) return "?";
+        return name.trim().substring(0, 1).toUpperCase(Locale.getDefault());
+    }
+
     static class PantryViewHolder extends RecyclerView.ViewHolder {
+        TextView initialText;
         TextView nameText;
         TextView quantityText;
         TextView expiryText;
@@ -116,6 +131,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
 
         public PantryViewHolder(@NonNull View itemView) {
             super(itemView);
+            initialText = itemView.findViewById(R.id.itemInitialText);
             nameText = itemView.findViewById(R.id.itemNameText);
             quantityText = itemView.findViewById(R.id.itemQuantityText);
             expiryText = itemView.findViewById(R.id.itemExpiryText);
